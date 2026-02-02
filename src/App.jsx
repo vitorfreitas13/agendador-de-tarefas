@@ -1,19 +1,13 @@
-import { useState } from "react";
+import AddTask from "./components/AddTasks";
+import Tasks from "./components/Tasks";
 
 function App() {
-  const [message, setMessage] = useState("Olá Terra!")
-
 
   return (
     <div>
-      <h1>{message}</h1>
-      <button
-        onClick={() => {
-          setMessage("Olá, fui clicado!")
-        }}
-      >
-        Mudar mensagem
-      </button>
+      <h1 className="text-red-500 text-3xl">Gerenciador de Tarefas</h1>
+      <AddTask />
+      <Tasks/>
     </div>
   );
 }
