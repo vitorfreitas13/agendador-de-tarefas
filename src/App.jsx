@@ -1,29 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddTask from "./components/AddTasks";
 import Tasks from "./components/Tasks";
 import { v4 } from "uuid";
 
 function App() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Estudar programação",
-      description: "Estudar programação para ser um desenvolvedor full stack",
-      isCompleted: false,
-    },
-    {
-      id: 2,
-      title: "Estudar Inglês",
-      description: "Estudar programação para se tornar fluente",
-      isCompleted: false,
-    },
-    {
-      id: 3,
-      title: "Estudar Matemática",
-      description: "Estudar programação para ser um desenvolvedor full stack",
-      isCompleted: false,
-    },
-  ]);
+  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem("tasks")));
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/todos?_limit=10",
+        {
+          method: "GET",
+        },
+      );
+      const data = await response.json();
+      setTasks(data);
+    };
+
+    // SE VOCE QUISER PODE CHAMAR UMA API PARA PEGAR AS TAREFAS
+    // fetchTasks();
+  }, []);
 
   function onTaskClick(taskId) {
     const newTasks = tasks.map((task) => {
@@ -43,14 +44,14 @@ function App() {
     setTasks(newTasks);
   }
 
-  function onAddTaskSubmit (title, description){
+  function onAddTaskSubmit(title, description) {
     const newTask = {
       id: v4(),
       title,
       description,
       isCompleted: false,
     };
-    setTasks([...tasks, newTask])
+    setTasks([...tasks, newTask]);
   }
 
   return (
